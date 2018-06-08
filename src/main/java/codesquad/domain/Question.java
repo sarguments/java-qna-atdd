@@ -1,5 +1,6 @@
 package codesquad.domain;
 
+import codesquad.UnAuthorizedException;
 import codesquad.dto.QuestionDto;
 import org.hibernate.annotations.Where;
 import support.domain.AbstractEntity;
@@ -80,5 +81,14 @@ public class Question extends AbstractEntity implements UrlGeneratable {
     @Override
     public String toString() {
         return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
+    }
+
+    public void update(Question target, User loginUser) {
+        if (!isOwner(loginUser)) {
+            throw new UnAuthorizedException("question writer not equal");
+        }
+
+        this.title = target.title;
+        this.contents = target.contents;
     }
 }
