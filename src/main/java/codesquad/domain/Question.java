@@ -53,7 +53,7 @@ public class Question extends AbstractEntity implements UrlGeneratable {
     }
 
     public void writeBy(User loginUser) {
-        this.writer = loginUser;
+        writer = loginUser;
     }
 
     public void addAnswer(Answer answer) {
@@ -71,11 +71,11 @@ public class Question extends AbstractEntity implements UrlGeneratable {
 
     @Override
     public String generateUrl() {
-        return String.format("/questions/%d", getId());
+        return String.format("/qna/%d", getId());
     }
 
     public QuestionDto toQuestionDto() {
-        return new QuestionDto(getId(), this.title, this.contents);
+        return new QuestionDto(getId(), title, contents);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class Question extends AbstractEntity implements UrlGeneratable {
             throw new UnAuthorizedException("question writer not equal");
         }
 
-        this.title = target.title;
-        this.contents = target.contents;
+        title = target.title;
+        contents = target.contents;
     }
 }

@@ -31,9 +31,9 @@ public class QuestionController {
     public String create(QuestionDto questionDto, @LoginUser User loginUser) {
         log.debug("QuestionDto : {}", questionDto);
 
-        qnaService.create(loginUser, questionDto.toQuestion());
+        Question question = qnaService.create(loginUser, questionDto.toQuestion());
 
-        return "redirect:";
+        return "redirect:" + question.generateUrl();
     }
 
     @GetMapping("/{id}")

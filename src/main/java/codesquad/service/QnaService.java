@@ -45,12 +45,11 @@ public class QnaService {
         return findById(id).filter(question -> question.isOwner(loginUser)).orElseThrow(EntityNotFoundException::new);
     }
 
-    public Question update(User loginUser, long id, Question updatedQuestion) {
+    @Transactional
+    public void update(User loginUser, long id, Question updatedQuestion) {
         Question originalQuestion = questionRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         originalQuestion.update(updatedQuestion, loginUser);
-
-        return questionRepository.save(originalQuestion);
     }
 
     @Transactional
