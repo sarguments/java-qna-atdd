@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityNotFoundException;
 
 @Controller
 @RequestMapping("/qna")
@@ -38,9 +39,12 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String read(@PathVariable Long id, Model model) {
-        qnaService.findById(id).ifPresent(question -> {
-            model.addAttribute("question", question);
-        });
+//        qnaService.findById(id).ifPresent(question -> {
+//            model.addAttribute("question", question);
+//        });
+
+        Question foundQuestion = qnaService.findById(id).orElseThrow(EntityNotFoundException::new);
+        model.addAttribute("question", foundQuestion);
 
         return "/qna/show";
     }
