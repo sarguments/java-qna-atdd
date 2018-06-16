@@ -3,6 +3,7 @@ package codesquad.service;
 import codesquad.CannotDeleteException;
 import codesquad.UnAuthorizedException;
 import codesquad.domain.*;
+import codesquad.dto.QuestionDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -27,11 +28,12 @@ public class QnaService {
     @Resource(name = "deleteHistoryService")
     private DeleteHistoryService deleteHistoryService;
 
-    public Question create(User loginUser, Question question) {
+    public Question addQuestion(User loginUser, QuestionDto questionDto) {
         if (loginUser.isGuestUser()) {
             throw new UnAuthorizedException();
         }
 
+        Question question = questionDto.toQuestion();
         question.writeBy(loginUser);
         log.debug("question : {}", question);
         return questionRepository.save(question);
@@ -46,10 +48,10 @@ public class QnaService {
     }
 
     @Transactional
-    public void update(User loginUser, long id, Question updatedQuestion) {
+    public Question update(User loginUser, long id, QuestionDto updatedQuestion) {
         Question originalQuestion = questionRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
-        originalQuestion.update(updatedQuestion, loginUser);
+        return originalQuestion.update(updatedQuestion.toQuestion(), loginUser);
     }
 
     @Transactional
@@ -72,6 +74,7 @@ public class QnaService {
     }
 
     public Answer addAnswer(User loginUser, long questionId, String contents) {
+        // TODO 답변 추가 기능 구현
         return null;
     }
 

@@ -32,7 +32,7 @@ public class QnaServiceTest {
     @Test
     public void questionCreateSuccess() {
         when(questionRepository.save(testQuestion)).thenReturn(testQuestion);
-        Question question = qnaService.create(testUser, testQuestion);
+        Question question = qnaService.addQuestion(testUser, testQuestion.toQuestionDto());
         log.debug("question : {}", question);
 
         assertThat(question.generateUrl(), is("/qna/" + question.getId()));
@@ -40,6 +40,6 @@ public class QnaServiceTest {
 
     @Test(expected = UnAuthorizedException.class)
     public void questionCreateFail() {
-        qnaService.create(User.GUEST_USER, testQuestion);
+        qnaService.addQuestion(User.GUEST_USER, testQuestion.toQuestionDto());
     }
 }
