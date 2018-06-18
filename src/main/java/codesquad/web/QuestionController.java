@@ -40,7 +40,7 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String read(@PathVariable Long id, Model model) {
-        Question foundQuestion = qnaService.findById(id).orElseThrow(EntityNotFoundException::new);
+        Question foundQuestion = qnaService.findQuestionById(id).orElseThrow(EntityNotFoundException::new);
         model.addAttribute("question", foundQuestion);
 
         return "/qna/show";
@@ -48,10 +48,10 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, @LoginUser User loginUser) {
-        Question foundQuestion = qnaService.findQuestion(id, loginUser);
+        Question foundQuestion = qnaService.findByLoginUser(id, loginUser);
         model.addAttribute("question", foundQuestion);
 
-        return "/qna/form";
+        return "/qna/updateForm";
     }
 
     @PutMapping("/{id}")

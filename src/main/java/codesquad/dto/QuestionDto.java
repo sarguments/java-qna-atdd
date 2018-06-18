@@ -58,6 +58,11 @@ public class QuestionDto {
         return new Question(title, contents);
     }
 
+    public boolean equalsTitleAndContent(QuestionDto that) {
+        return Objects.equals(title, that.title) &&
+                Objects.equals(contents, that.contents);
+    }
+
     @Override
     public String toString() {
         return "QuestionDto{" +

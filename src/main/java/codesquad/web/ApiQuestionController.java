@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.persistence.EntityNotFoundException;
+import javax.persistence.EntityExistsException;
 import javax.validation.Valid;
 import java.net.URI;
 
@@ -23,8 +23,8 @@ public class ApiQuestionController {
     private QnaService qnaService;
 
     @PostMapping("")
-    public ResponseEntity<Void> create(@Valid @RequestBody QuestionDto question, @LoginUser User user) {
-        Question savedQuestion = qnaService.addQuestion(user, question);
+    public ResponseEntity<Void> create(@Valid @RequestBody QuestionDto question, @LoginUser User loginUser) {
+        Question savedQuestion = qnaService.addQuestion(loginUser, question);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("/api/qna/" + savedQuestion.getId()));
@@ -33,7 +33,7 @@ public class ApiQuestionController {
 
     @GetMapping("/{id}")
     public QuestionDto show(@PathVariable long id) {
-        Question question = qnaService.findById(id).orElseThrow(EntityNotFoundException::new);
+        Question question = qnaService.findQuestionById(id).orElseThrow(EntityExistsException::new);
         return question.toQuestionDto();
     }
 

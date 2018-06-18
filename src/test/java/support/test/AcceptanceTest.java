@@ -2,11 +2,15 @@ package support.test;
 
 import codesquad.domain.User;
 import codesquad.domain.UserRepository;
+import codesquad.dto.QuestionDto;
+import codesquad.dto.UserDto;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -55,4 +59,27 @@ public abstract class AcceptanceTest {
     protected <T> T getResoure(String location, Class<T> responseType, User loginUser) {
         return basicAuthTemplate(loginUser).getForObject(location, responseType);
     }
+
+    protected HttpEntity makeHttpEntity() {
+        HttpHeaders headers = new HttpHeaders();
+        return new HttpEntity(headers);
+    }
+
+    protected User makeAnotherTestUser() {
+        return new User("test", "test", "test", "test@test.com");
+    }
+
+    protected QuestionDto makeTestQuestionDto() {
+        return new QuestionDto("testtitle", "testContents");
+    }
+
+    protected UserDto createUserDto(String userId) {
+        return new UserDto(userId, "password", "name", "javajigi@slipp.net");
+    }
+
+    protected String getResponseLocation(ResponseEntity<String> response) {
+        return response.getHeaders().getLocation().getPath();
+    }
 }
+
+

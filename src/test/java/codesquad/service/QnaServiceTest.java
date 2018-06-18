@@ -31,6 +31,8 @@ public class QnaServiceTest {
 
     @Test
     public void questionCreateSuccess() {
+        log.debug("question : {}", testQuestion);
+        //testQuestion.writeBy(testUser);
         when(questionRepository.save(testQuestion)).thenReturn(testQuestion);
         Question question = qnaService.addQuestion(testUser, testQuestion.toQuestionDto());
         log.debug("question : {}", question);
