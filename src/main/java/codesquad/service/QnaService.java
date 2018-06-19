@@ -78,7 +78,6 @@ public class QnaService {
     }
 
     public Answer addAnswer(User loginUser, long questionId, String contents) {
-        // TODO 답변 추가 기능 구현
         Question question = questionRepository.findById(questionId).orElseThrow(EntityNotFoundException::new);
         Answer answer = new Answer(loginUser, question, contents);
         return answerRepository.save(answer);
@@ -86,7 +85,6 @@ public class QnaService {
 
     @Transactional
     public void deleteAnswer(User loginUser, long id) {
-        // TODO 답변 삭제 기능 구현
         Answer savedAnswer = answerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         answerRepository.delete(savedAnswer);
     }
