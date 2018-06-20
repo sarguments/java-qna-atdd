@@ -1,5 +1,6 @@
 package codesquad.domain;
 
+import codesquad.CannotDeleteException;
 import codesquad.UnAuthorizedException;
 import codesquad.dto.QuestionDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -68,7 +69,7 @@ public class Question extends AbstractEntity implements UrlGeneratable {
     }
 
     public boolean isOwner(User loginUser) {
-        return writer.equals(loginUser);
+        return writer.matchUser(loginUser);
     }
 
     public boolean isDeleted() {
@@ -98,5 +99,51 @@ public class Question extends AbstractEntity implements UrlGeneratable {
         contents = target.contents;
 
         return this;
+    }
+
+    public boolean checkAnswerExist() {
+        return !answers.isEmpty();
+    }
+
+    public boolean checkAllAnswerWriterIsSameWithWriter() {
+        for (Answer answer: answers) {
+            if (!answer.isOwner(writer)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public List<DeleteHistory> delete(User loginUser) throws CannotDeleteException {
+        checkLoginUser(loginUser);
+
+        List<DeleteHistory> toReturnList = new ArrayList<>();
+        if (checkAnswerExist()) {
+            toReturnList = deleteAllAnswers(toReturnList);
+        }
+
+        deleted = true;
+        toReturnList.add(new DeleteHistory(ContentType.QUESTION, getId(), writer));
+
+        return toReturnList;
+    }
+
+    private void checkLoginUser(User loginUser) {
+        if (!isOwner(loginUser)) {
+            throw new UnAuthorizedException();
+        }
+    }
+
+    public List<DeleteHistory> deleteAllAnswers(List<DeleteHistory> toReturnList) throws CannotDeleteException {
+        if (!checkAllAnswerWriterIsSameWithWriter()) {
+            throw new CannotDeleteException("모든 답변자와 작성자가 같지 않음");
+        }
+
+        for (Answer answer: answers) {
+            toReturnList.add(answer.delete());
+        }
+
+        return toReturnList;
     }
 }

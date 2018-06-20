@@ -82,6 +82,10 @@ public class User extends AbstractEntity {
         email = target.email;
     }
 
+    public boolean matchUser(User user) {
+        return user.equals(this);
+    }
+
     public boolean matchPassword(String password) {
         return this.password.equals(password);
     }
