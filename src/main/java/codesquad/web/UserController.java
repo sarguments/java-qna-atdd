@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
-    public static final String REDIRECT_USERS = "redirect:/users";
+    private static final String REDIRECT_USERS = "redirect:/users";
 
     @Resource(name = "userService")
     private UserService userService;

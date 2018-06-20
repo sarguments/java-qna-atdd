@@ -5,7 +5,6 @@ import codesquad.UnAuthorizedException;
 import codesquad.dto.QuestionDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.Where;
 import support.domain.AbstractEntity;
 import support.domain.UrlGeneratable;
 
@@ -31,12 +30,11 @@ public class Question extends AbstractEntity implements UrlGeneratable {
     @JsonProperty
     private User writer;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    @Where(clause = "deleted = false")
-    @OrderBy("id ASC")
     @JsonIgnore
-    private List<Answer> answers = new ArrayList<>();
+    @Embedded
+    private Answers answers = new Answers();
 
+    @JsonProperty
     private boolean deleted = false;
 
     public Question() {
@@ -106,13 +104,7 @@ public class Question extends AbstractEntity implements UrlGeneratable {
     }
 
     public boolean checkAllAnswerWriterIsSameWithWriter() {
-        for (Answer answer: answers) {
-            if (!answer.isOwner(writer)) {
-                return false;
-            }
-        }
-
-        return true;
+        return answers.checkAllWriterSameWith(writer);
     }
 
     public List<DeleteHistory> delete(User loginUser) throws CannotDeleteException {
@@ -140,9 +132,7 @@ public class Question extends AbstractEntity implements UrlGeneratable {
             throw new CannotDeleteException("모든 답변자와 작성자가 같지 않음");
         }
 
-        for (Answer answer: answers) {
-            toReturnList.add(answer.delete());
-        }
+        answers.delete(toReturnList, writer);
 
         return toReturnList;
     }

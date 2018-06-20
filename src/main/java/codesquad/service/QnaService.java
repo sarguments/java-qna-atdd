@@ -84,13 +84,9 @@ public class QnaService {
     }
 
     @Transactional
-    public void deleteAnswer(User loginUser, long id) {
+    public void deleteAnswer(User loginUser, long id) throws CannotDeleteException {
         Answer savedAnswer = answerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        if (!savedAnswer.isOwner(loginUser)) {
-            throw new UnAuthorizedException("답변 작성자와 로그인 유저가 다름");
-        }
-
-        answerRepository.delete(savedAnswer);
+        savedAnswer.delete(loginUser);
     }
 
     public Long questionCount() {
