@@ -1,16 +1,21 @@
 package codesquad.dto;
 
 import codesquad.domain.Question;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
 public class QuestionDto {
+    @JsonIgnore
     private long id;
 
+    @JsonProperty
     @Size(min = 3, max = 100)
     private String title;
 
+    @JsonProperty
     @Size(min = 3)
     private String contents;
 

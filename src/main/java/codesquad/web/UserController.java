@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @PostMapping("")
-    public String create(UserDto userDto) {
+    public String create(@RequestBody UserDto userDto) {
         userService.add(userDto);
         return REDIRECT_USERS;
     }
@@ -74,5 +74,11 @@ public class UserController {
         httpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, newUser);
 
         return REDIRECT_USERS;
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
+        return "redirect:/";
     }
 }

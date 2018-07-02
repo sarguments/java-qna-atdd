@@ -24,14 +24,14 @@ public class ApiUserController {
     private UserService userService;
 
     @PostMapping("")
-    public ResponseEntity<Void> create(@Valid @RequestBody UserDto user) {
+    public ResponseEntity<User> create(@Valid UserDto user) {
         User savedUser = userService.add(user);
 
         log.info("api user controller User : {}", user.toString());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("/api/users/" + savedUser.getId()));
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(savedUser, headers, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

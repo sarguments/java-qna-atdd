@@ -4,6 +4,7 @@ function addAnswer(e) {
   e.preventDefault();
 
   var queryString = $(".answer-area").val();
+
   var url = $(".answer-write").attr("action");
 
   console.log("queryString " + queryString);

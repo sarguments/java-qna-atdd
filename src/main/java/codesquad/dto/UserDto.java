@@ -64,9 +64,8 @@ public class UserDto {
     }
 
     public User toUser() {
-        return new User(this.userId, this.password, this.name, this.email);
+        return new User(userId, password, name, email);
     }
-
 
     @Override
     public String toString() {

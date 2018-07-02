@@ -54,7 +54,6 @@ public class QnaService {
     @Transactional
     public Question update(User loginUser, long id, QuestionDto updatedQuestion) {
         Question originalQuestion = questionRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-
         return originalQuestion.update(updatedQuestion.toQuestion(), loginUser);
     }
 
