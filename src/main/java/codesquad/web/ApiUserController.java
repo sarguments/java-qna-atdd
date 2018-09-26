@@ -24,7 +24,7 @@ public class ApiUserController {
     private UserService userService;
 
     @PostMapping("")
-    public ResponseEntity<User> create(@Valid UserDto user) {
+    public ResponseEntity<User> create(@Valid @RequestBody UserDto user) {
         User savedUser = userService.add(user);
 
         log.info("api user controller User : {}", user.toString());

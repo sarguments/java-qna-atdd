@@ -70,7 +70,6 @@ public class ApiQuestionAcceptanceTest extends AcceptanceTest {
     @Test
     public void delete() {
         // 질문도 default, 답변도 default, 삭제도 default
-
         String location = createResource(QUESTION_URL, newQuestion);
 
         AnswerDto newAnswer = new AnswerDto("comment");
@@ -88,7 +87,6 @@ public class ApiQuestionAcceptanceTest extends AcceptanceTest {
     @Test
     public void delete_not_same_question_answer_writer() {
         // 질문은 default, 답변은 newUser, 삭제는 default
-
         String location = createResource(QUESTION_URL, newQuestion);
 
         UserDto newUser = createUserDto("testuser100");
